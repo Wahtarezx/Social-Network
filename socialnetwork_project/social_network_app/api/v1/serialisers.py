@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Publications, Comments
+from social_network_app.api.v1.models import Publications, Comments
 
 
 class PublicationsSerializer(ModelSerializer):
     like_count = serializers.SerializerMethodField()
-    # comment = serializers.SerializerMethodField()
 
     class Meta:
         model = Publications

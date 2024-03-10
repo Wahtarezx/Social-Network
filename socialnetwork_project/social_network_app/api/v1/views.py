@@ -10,9 +10,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Publications, Like, Comments
-from .serialisers import PublicationsSerializer, PublicationsCreateSerializer, CommentSerializer
-from .permissions import IsOwnerOrReadOnly
+from social_network_app.api.v1.models import Publications, Like, Comments
+from social_network_app.api.v1.serialisers import PublicationsSerializer, PublicationsCreateSerializer, CommentSerializer
+from social_network_app.api.v1.permissions import IsOwnerOrReadOnly
+
+from django.utils.translation import gettext_lazy as _
 
 
 class PublicationsListView(ListAPIView):
@@ -49,19 +51,14 @@ class LikePublicationView(APIView):
         publication = get_object_or_404(Publications, pk=pk)
         user = request.user
         if Like.objects.filter(user=user, publication=publication).exists():
-            return Response({"detail": "Вы уже поставили лайк на эту публикацию."}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            Like.objects.create(user=user, publication=publication)
-            return Response({"detail": "Вы поставили лайк на эту публикацию."}, status=status.HTTP_200_OK)
+            like = get_object_or_404(Like, user=user, publication=publication)
+            like.delete()
+            unlike_message = _('You unliked this publication')
+            return Response({"detail": unlike_message}, status=status.HTTP_200_OK)
 
-
-class UnlikePublicationView(APIView):
-    def post(self, request, pk):
-        publication = get_object_or_404(Publications, pk=pk)
-        user = request.user
-        like = get_object_or_404(Like, user=user, publication=publication)
-        like.delete()
-        return Response({"detail": "Вы убрали лайк с этой публикации."}, status=status.HTTP_200_OK)
+        Like.objects.create(user=user, publication=publication)
+        like_message = _('You liked this publication')
+        return Response({"detail": like_message}, status=status.HTTP_200_OK)
 
 
 class CommentPublicationView(APIView):
@@ -70,7 +67,8 @@ class CommentPublicationView(APIView):
         user = request.user
         text = request.data['text']
         Comments.objects.create(user=user, text=text, publication=publication)
-        return Response({'detail': f'Вы оставили комментарий для публикации №{publication.pk}'},
+        comment_message = _('You commented this publication')
+        return Response({'detail': f'{comment_message} №{publication.pk}'},
                         status=status.HTTP_200_OK)
 
 
@@ -86,9 +84,8 @@ class CommentPublicationsListView(ListAPIView):
 class CommentPublicationDetailView(RetrieveDestroyAPIView):
     serializer_class = CommentSerializer
     queryset = Comments.objects.all()
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_queryset(self):
         publication_pk = self.kwargs['pub_pk']
         return Comments.objects.filter(publication__pk=publication_pk)
-
-

@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('socnetapp', '0005_delete_like'),
+        ('social_network_app', '0005_delete_like'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Like',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('publication', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='likes', to='socnetapp.publications')),
+                ('publication', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='likes', to='social_network_app.publications')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='likes', to=settings.AUTH_USER_MODEL)),
             ],
             options={

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('socnetapp', '0003_like'),
+        ('social_network_app', '0003_like'),
     ]
 
     operations = [

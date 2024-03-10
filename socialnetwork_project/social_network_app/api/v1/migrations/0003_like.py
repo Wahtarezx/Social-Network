@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('contenttypes', '0002_remove_content_type_name'),
-        ('socnetapp', '0002_alter_publications_pub_date'),
+        ('social_network_app', '0002_alter_publications_pub_date'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

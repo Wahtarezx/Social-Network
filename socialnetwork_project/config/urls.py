@@ -1,5 +1,5 @@
 """
-URL configuration for socialnetwork_project project.
+URL configuration for config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/socnet/', include('socnetapp.urls')),
-    path('api/v1/auth/', include('myauth.urls')),
+    path('api/v1/auth/', include('myauth.api.urls')),
 ]
+
+urlpatterns += i18n_patterns(
+    path('api/v1/social_network/', include('social_network_app.api.urls')),
+)
