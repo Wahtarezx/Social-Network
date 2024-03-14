@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from social_network_app.api.v1.models import Publications, Comments
+from social_network_app.models import Publications, Comments, Reposts
+from generic_relations.relations import GenericRelatedField
 
 
 class PublicationsSerializer(ModelSerializer):
@@ -31,3 +32,14 @@ class CommentSerializer(ModelSerializer):
     class Meta:
         model = Comments
         fields = '__all__'
+
+
+class RepostSerializer(ModelSerializer):
+    class Meta:
+        model = Reposts
+        fields = '__all__'
+        extra_kwargs = {'user': {'read_only': True}}
+
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)

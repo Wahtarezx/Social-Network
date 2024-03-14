@@ -1,4 +1,5 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from social_network_app.api.v1.views import (
     PublicationsListView,
     PublicationsDetailView,
@@ -8,8 +9,11 @@ from social_network_app.api.v1.views import (
     CommentPublicationView,
     CommentPublicationsListView,
     CommentPublicationDetailView,
+    Repost,
 )
 
+router = DefaultRouter()
+router.register('repost_list', Repost)
 
 app_name = 'social_network_app'
 
@@ -22,5 +26,6 @@ urlpatterns = [
     path('publications/<int:pk>/comment/', CommentPublicationView.as_view(), name='comment'),
     path('publications/<int:pub_pk>/comments_list/', CommentPublicationsListView.as_view(), name='comments_list'),
     path('publications/<int:pub_pk>/comments_list/<int:pk>/', CommentPublicationDetailView.as_view(),
-         name='comment_delete')
+         name='comment_delete'),
+    path('reposts/', include(router.urls)),
 ]

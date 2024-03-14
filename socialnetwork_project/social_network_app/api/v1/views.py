@@ -6,13 +6,15 @@ from rest_framework.generics import (
     UpdateAPIView,
     get_object_or_404
 )
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from social_network_app.api.v1.models import Publications, Like, Comments
-from social_network_app.api.v1.serialisers import PublicationsSerializer, PublicationsCreateSerializer, CommentSerializer
-from social_network_app.api.v1.permissions import IsOwnerOrReadOnly
+from social_network_app.models import Publications, Like, Comments, Reposts
+from social_network_app.api.v1.serialisers import (PublicationsSerializer, PublicationsCreateSerializer,
+                                                   CommentSerializer, RepostSerializer)
+from social_network_app.permissions import IsOwnerOrReadOnly
 
 from django.utils.translation import gettext_lazy as _
 
@@ -89,3 +91,10 @@ class CommentPublicationDetailView(RetrieveDestroyAPIView):
     def get_queryset(self):
         publication_pk = self.kwargs['pub_pk']
         return Comments.objects.filter(publication__pk=publication_pk)
+
+
+class Repost(ModelViewSet):
+    queryset = Reposts.objects.all()
+    serializer_class = RepostSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
