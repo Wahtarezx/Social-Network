@@ -9,9 +9,13 @@ class Publications(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='publications')
     reposts = GenericRelation('Reposts')
+    image = models.ImageField(upload_to='publications/images', null=True, blank=True)
 
     def like_count(self):
         return self.likes.count()
+
+    def reposts_count(self):
+        return self.reposts.count()
 
 
 class Like(models.Model):

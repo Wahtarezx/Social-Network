@@ -97,4 +97,3 @@ class Repost(ModelViewSet):
     queryset = Reposts.objects.all()
     serializer_class = RepostSerializer
     permission_classes = [IsOwnerOrReadOnly]
-
