@@ -1,6 +1,15 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from social_network_app.models import Publications, Comments, Reposts
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    interests = serializers.StringRelatedField(many=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = ('interests',)
 
 
 class CommentSerializer(ModelSerializer):
@@ -14,6 +23,7 @@ class PublicationsSerializer(ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
     like_count = serializers.SerializerMethodField()
     reposts_count = serializers.SerializerMethodField()
+    user_interests = CustomUserSerializer(source='user', read_only=True) 
 
     class Meta:
         model = Publications

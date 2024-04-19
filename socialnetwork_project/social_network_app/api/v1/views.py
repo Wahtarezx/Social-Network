@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.generics import (
     ListAPIView,
@@ -19,7 +20,6 @@ from social_network_app.permissions import IsOwnerOrReadOnly
 from django.utils.translation import gettext_lazy as _
 
 
-#Комментарий к коду
 class PublicationsListView(ListAPIView):
     queryset = Publications.objects.all()
     serializer_class = PublicationsSerializer

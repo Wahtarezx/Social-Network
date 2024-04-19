@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'social_network_app.apps.SocnetappConfig',
-    'myauth.apps.MyauthConfig'
+    'myauth.apps.MyauthConfig',
+    'advertisement.apps.AdvertisementConfig',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,14 @@ SIMPLE_JWT = {
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+AUTH_USER_MODEL = 'myauth.CustomUser'
+
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'Kurckoww@yandex.ru'
+EMAIL_HOST_PASSWORD = "wxdgtkynoxlwxaoh"
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
